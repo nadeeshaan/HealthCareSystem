@@ -11,6 +11,8 @@ public class Appointment {
     private Patient patient;
     private String hospital;
     private double fee;
+    private boolean confirmed;
+    private String paymentID;
 
     public String getTime() {
         return time;
@@ -58,5 +60,21 @@ public class Appointment {
 
     public void setFee(double fee) {
         this.fee = fee;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public String getPaymentID() {
+        return paymentID;
+    }
+
+    public void setPaymentID(String paymentID) {
+        this.paymentID = paymentID;
     }
 }

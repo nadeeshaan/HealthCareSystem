@@ -22,12 +22,14 @@ public class Doctor {
     private String hospital;
     private String category;
     private String availability;
+    private double fee;
 
-    public Doctor(String name, String hospital, String category, String availability) {
+    public Doctor(String name, String hospital, String category, String availability, double fee) {
         this.name = name;
         this.hospital = hospital;
         this.category = category;
         this.availability = availability;
+        this.fee = fee;
     }
 
     public String getName() {
@@ -60,5 +62,13 @@ public class Doctor {
 
     public void setAvailability(String availability) {
         this.availability = availability;
+    }
+
+    public double getFee() {
+        return fee;
+    }
+
+    public void setFee(double fee) {
+        this.fee = fee;
     }
 }

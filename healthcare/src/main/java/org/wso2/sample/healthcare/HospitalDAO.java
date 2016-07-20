@@ -9,6 +9,7 @@ import java.util.List;
 public class HospitalDAO {
 
     public static List<Doctor> doctorsList = new ArrayList<>();
+    public static List<String> catergories = new ArrayList<>();
 
     public static List<Doctor> findDoctorByCategory(String category) {
         List<Doctor> list = new ArrayList<>();
@@ -18,6 +19,16 @@ public class HospitalDAO {
             }
         }
         return list;
+    }
+
+    public static Doctor findDoctorByName(String name) {
+        for (Doctor doctor: doctorsList) {
+            if (doctor.getName().equals(name)) {
+                return doctor;
+            }
+        }
+
+        return null;
     }
 
     public static Appointment makeAppointment(String category, String doctor) {
