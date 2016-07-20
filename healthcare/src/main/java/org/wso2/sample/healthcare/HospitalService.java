@@ -35,47 +35,44 @@ import java.util.Map;
 @Path("/hospital/categories")
 public class HospitalService {
 
-    private Map<String, List<Doctor>> doctorsList = new HashMap<>();
+//    private Map<String, List<Doctor>> doctorsList = new HashMap<>();
+    private Map<Integer, Appointment> appointments = new HashMap<>();
+//    HospitalDAO dao = new HospitalDAO();
 
     public HospitalService() {
-        List<Doctor> surgeonsList = new ArrayList<>();
-        List<Doctor> cardiologistsList = new ArrayList<>();
-        List<Doctor> gynaecologistsList = new ArrayList<>();
-        List<Doctor> entList = new ArrayList<>();
-        List<Doctor> paediatriciansList = new ArrayList<>();
-        surgeonsList.add((new Doctor("ANURA BANAGALA", "Asiri Hospital", "SURGERY", "9.00 a.m - 11.00 a.m")));
-        surgeonsList.add((new Doctor("A.N.K. ABAYAJEEWA", "Durdans Hospital", "SURGERY", "8.00 a.m - 10.00 a.m")));
-        surgeonsList.add((new Doctor("ANIL P AMBAWATTA", "Apollo Hospitals", "SURGERY", "3.00 p.m - 5.00 p.m")));
-        cardiologistsList.add((new Doctor("K. ALAGARATNAM", "Nawaloka Hospital", "CARDIOLOGY", "9.00 a.m - 11.00 a.m")));
-        cardiologistsList.add((new Doctor("SANJAYA ABEYGUNASEKARA", "Asiri Hospital", "CARDIOLOGY", "8.00 a.m - 10.00 a.m")));
-        gynaecologistsList.add((new Doctor("K. ALAGARATNAM", "Durdans Hospital", "GYNAECOLOGY", "9.00 a.m - 11.00 a.m")));
-        gynaecologistsList.add((new Doctor("SANJAYA ABEYGUNASEKARA", "Asiri Hospital", "GYNAECOLOGY", "8.00 a.m - 10.00 a.m")));
-        entList.add((new Doctor("K. ALAGARATNAM", "Asiri Hospital", "ENT", "9.00 a.m - 11.00 a.m")));
-        entList.add((new Doctor("SANJAYA ABEYGUNASEKARA", "Asiri Hospital", "ENT", "8.00 a.m - 10.00 a.m")));
-        paediatriciansList.add((new Doctor("AJITH AMARASINGHE", "Durdans Hospital", "PAEDIATRY", "9.00 a.m - 11.00 a.m")));
-        paediatriciansList.add((new Doctor("SANJAYA ABEYGUNASEKARA", "Nawaloka Hospital", "PAEDIATRY", "8.00 a.m - 10.00 a.m")));
-        doctorsList.put("SURGERY", surgeonsList);
-        doctorsList.put("CARDIOLOGY", cardiologistsList);
-        doctorsList.put("GYNAECOLOGY", gynaecologistsList);
-        doctorsList.put("ENT", entList);
-        doctorsList.put("PAEDIATRY", paediatriciansList);
+        HospitalDAO.doctorsList.add((new Doctor("ANURA BANAGALA", "Asiri Hospital", "SURGERY", "9.00 a.m - 11.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("A.N.K. ABAYAJEEWA", "Durdans Hospital", "SURGERY", "8.00 a.m - 10.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("ANIL P AMBAWATTA", "Apollo Hospitals", "SURGERY", "3.00 p.m - 5.00 p.m")));
+        HospitalDAO.doctorsList.add((new Doctor("K. ALAGARATNAM", "Nawaloka Hospital", "CARDIOLOGY", "9.00 a.m - 11.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("SANJAYA ABEYGUNASEKARA", "Asiri Hospital", "CARDIOLOGY", "8.00 a.m - 10.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("K. ALAGARATNAM", "Durdans Hospital", "GYNAECOLOGY", "9.00 a.m - 11.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("SANJAYA ABEYGUNASEKARA", "Asiri Hospital", "GYNAECOLOGY", "8.00 a.m - 10.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("K. ALAGARATNAM", "Asiri Hospital", "ENT", "9.00 a.m - 11.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("SANJAYA ABEYGUNASEKARA", "Asiri Hospital", "ENT", "8.00 a.m - 10.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("AJITH AMARASINGHE", "Durdans Hospital", "PAEDIATRY", "9.00 a.m - 11.00 a.m")));
+        HospitalDAO.doctorsList.add((new Doctor("SANJAYA ABEYGUNASEKARA", "Nawaloka Hospital", "PAEDIATRY", "8.00 a.m - 10.00 a.m")));
     }
 
     @GET
     @Path("/{category}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("category") String category) {
-        List<Doctor> stock = doctorsList.get(category);
+        List<Doctor> stock = HospitalDAO.findDoctorByCategory(category);
         return stock == null ?
                 Response.status(Response.Status.NOT_FOUND).build() :
                 Response.status(Response.Status.OK).entity(stock).build();
     }
 
     @POST
-    @Path("/")
-    public void post() {
-        // TODO: Implementation for HTTP POST request
-        System.out.println("POST invoked");
+    @Path("/{category}/doctors/{doctor_name}/appointments/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addAppointment(Appointment appointment) {
+        if(appointments.get(appointment.getAppointmentNumber()) != null) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+        appointments.put(appointment.getAppointmentNumber(), appointment);
+        return Response.status(Response.Status.OK).
+                entity("http://localhost:8080/stockquote/" + appointment.getAppointmentNumber()).build();
     }
 
     @PUT
